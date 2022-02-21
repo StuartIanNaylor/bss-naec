@@ -1,9 +1,9 @@
 '''
 Author: Okrio
 Date: 2022-02-21 22:50:04
-LastEditTime: 2022-02-21 23:49:19
+LastEditTime: 2022-02-22 00:40:23
 LastEditors: Please set LastEditors
-Description: nbss-aec
+Description: nbss-aec refer to "Semi-Blind Source Separation for Nonlinear Acoustic Echo Cancellation"
 FilePath: /bss-naec/matlab/main.py
 '''
 import numpy as np
@@ -59,7 +59,9 @@ def bss_naec(x, y, p, nfft, eta):
     for n in range(N):
         Yn = Y[:, n, :]
         for k in range(nf):
-            En[:, :, k] = W[:, :, k] * Yn[:, :, k]
+            # tmp = W[:, :, k] * Yn[:, k]
+            tmp = np.matmul(W[:, :, k], np.expand_dims(Yn[:, k], axis=-1))
+            En[:, :, k] = tmp
         Ssq = np.sqrt(np.sum(abs(En)**2, axis=-1))
         Ssq1 = (Ssq + 1e-6)**-1
         for k in range(nf):
